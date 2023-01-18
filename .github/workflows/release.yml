@@ -7,6 +7,7 @@ on:
 
 jobs:
   create-release:
+    permissions: write-all
     runs-on: ubuntu-20.04
     outputs:
       release_id: ${{ steps.create-release.outputs.result }}
@@ -37,6 +38,7 @@ jobs:
             return data.id
 
   build-tauri:
+    permissions: write-all
     needs: create-release
     strategy:
       fail-fast: false
@@ -66,6 +68,7 @@ jobs:
           releaseId: ${{ needs.create-release.outputs.release_id }}
 
   publish-release:
+    permissions: write-all
     runs-on: ubuntu-20.04
     needs: [create-release, build-tauri]
 
