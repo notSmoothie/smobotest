@@ -10,7 +10,7 @@
                             image="https://cdn.vuetifyjs.com/docs/images/logos/v.png"
                         />
 
-                        Vuetify 3
+                        Vuetify 3.1
                     </div>
                 </v-app-bar-title>
             </v-container>
