@@ -57,7 +57,7 @@
         "updater": {
             "active": true,
             "endpoints": [
-                "https://gist.githubusercontent.com/notSmoothie/0d0b4dd289c7af5d7f89a1c7bca9103b/raw/a7edc4b6edceea198011fc81171d50a336ca30bd/update.json"
+                "https://gist.githubusercontent.com/notSmoothie/0d0b4dd289c7af5d7f89a1c7bca9103b/raw/update.json"
             ],
             "dialog": true,
             "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDUzMDE3QzY0RjIwNUI1ODAKUldTQXRRWHlaSHdCVTFORE1qZlhWRDlvNWNaY2ZlVHQzK0JjN3UyZlNlRnNvZzB1MDVsVHdWZHQK"
