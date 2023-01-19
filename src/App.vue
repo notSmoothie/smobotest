@@ -10,7 +10,7 @@
                             image="https://cdn.vuetifyjs.com/docs/images/logos/v.png"
                         />
 
-                        SMOBOT 0.0.6
+                        SMOBOT 0.0.7
                     </div>
                 </v-app-bar-title>
             </v-container>
