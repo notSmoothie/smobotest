@@ -15,10 +15,12 @@ jobs:
         uses: actions/github-script@v6
         env: 
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          BAM: 'BAM'
         with:
           script: |
-            const { GITHUB_TOKEN } = process.env
-            console.log(GITHUB_TOKEN);
+            const { GITHUB_TOKEN, BAM } = process.env
+            console.log(`${BAM}`);
+            console.log(`${GITHUB_TOKEN}`);
             const octokit = new Octokit({
             auth: GITHUB_TOKEN
             })
