@@ -10,27 +10,14 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-20.04
     steps:
-      - name: create release
-        id: create-release
-        uses: actions/github-script@v6
+      - name: write
+        uses: sergeysova/gist-write-action@v1
         env: 
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-          BAM: 'BAM'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          script: |
-            const { GITHUB_TOKEN, BAM } = process.env
-            console.log(`${BAM}`);
-            console.log(`${GITHUB_TOKEN}`);
-            const octokit = new Octokit({
-            auth: `${GITHUB_TOKEN}`
-            })
-
-            await octokit.request('PATCH /gists/0d0b4dd289c7af5d7f89a1c7bca9103b', {
-            gist_id: '0d0b4dd289c7af5d7f89a1c7bca9103b',
-            description: 'An updated gist description',
-            files: {
-            'update.json': {
-            content: ' {
+          gist_id: 0d0b4dd289c7af5d7f89a1c7bca9103b
+          file_name: update.json
+          content: '{
             "version": "v0.0.7",
             "notes": "Test version",
             "pub_date": "2021-06-22T19:25:57Z",
@@ -53,10 +40,6 @@ jobs:
               }
             }
             }'
-            }
-            }
-            })
-
   create-release:
     permissions: write-all
     runs-on: ubuntu-20.04
