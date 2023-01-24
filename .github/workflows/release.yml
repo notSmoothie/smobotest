@@ -15,11 +15,10 @@ jobs:
         uses: sergeysova/gist-write-action@v1
         env: 
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          ARTIFACTS: ${{needs.build-tauri.artifactPaths}}
         with:
           gist_id: 0d0b4dd289c7af5d7f89a1c7bca9103b
           file_name: update.json
-          content: '${process.env.ARTIFACTS}'
+          content: ${{needs.build-tauri.artifactPaths}}
           # content: '{
           #   "version": "v0.0.7",
           #   "notes": "Test version",
