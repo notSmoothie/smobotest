@@ -22,7 +22,7 @@ jobs:
             console.log(`${BAM}`);
             console.log(`${GITHUB_TOKEN}`);
             const octokit = new Octokit({
-            auth: GITHUB_TOKEN
+            auth: `${GITHUB_TOKEN}`
             })
 
             await octokit.request('PATCH /gists/0d0b4dd289c7af5d7f89a1c7bca9103b', {
