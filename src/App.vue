@@ -4,9 +4,10 @@
             <v-avatar
                 rounded="0"
                 class="mr-3"
-                image="https://cdn.vuetifyjs.com/docs/images/logos/v.png"
+                image="../src/assets/logo.svg"
             />
-            SMOBOT 0.0.9
+            SMOBOT 0.0.10
+           
         </div>
 
         <v-main>
@@ -18,7 +19,7 @@
                     <v-container class="text-center">
                         <v-responsive class="mx-auto" width="500">
                             <v-img
-                                src="https://cdn.vuetifyjs.com/docs/images/logos/v.png"
+                                src="../src/assets/logo.svg"
                                 height="400"
                             />
 
