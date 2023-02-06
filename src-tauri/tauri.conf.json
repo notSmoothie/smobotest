@@ -8,9 +8,13 @@
     },
     "package": {
         "productName": "smobot-test",
-        "version": "0.0.8"
+        "version": "0.0.9"
     },
     "tauri": {
+        "systemTray": {
+            "iconPath": "icons/icon.png",
+            "iconAsTemplate": true
+        },
         "allowlist": {
             "all": true,
             "fs": {
@@ -67,8 +71,12 @@
                 "fullscreen": false,
                 "height": 720,
                 "resizable": true,
+                "hiddenTitle": false,
+                "decorations": false,
                 "title": "smobot-test",
-                "width": 1080
+                "theme": "Dark",
+                "width": 1080,
+                "userAgent":"mrdka"
             }
         ]
     }

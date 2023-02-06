@@ -1,20 +1,13 @@
 <template>
     <v-app>
-        <v-app-bar>
-            <v-container class="d-flex align-center py-0">
-                <v-app-bar-title class="pl-0">
-                    <div class="d-flex align-center">
-                        <v-avatar
-                            rounded="0"
-                            class="mr-3"
-                            image="https://cdn.vuetifyjs.com/docs/images/logos/v.png"
-                        />
-
-                        SMOBOT 0.0.7
-                    </div>
-                </v-app-bar-title>
-            </v-container>
-        </v-app-bar>
+        <div data-tauri-drag-region class="d-flex align-center title">
+            <v-avatar
+                rounded="0"
+                class="mr-3"
+                image="https://cdn.vuetifyjs.com/docs/images/logos/v.png"
+            />
+            SMOBOT 0.0.9
+        </div>
 
         <v-main>
             <section id="hero">
@@ -257,3 +250,16 @@
 <script>
 export default { name: "App" };
 </script>
+
+<style>
+.title {
+    position: fixed;
+    width: 100%;
+    background-color: gray;
+    z-index: 42069;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+</style>
