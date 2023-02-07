@@ -23,7 +23,7 @@
                 color="red"
                 variant="text"
                 size="25px"
-                class="mr-2 my-2 text-black"
+                class="mr-2 my-2  text-black"
                 
               ></v-btn>
               </div>
