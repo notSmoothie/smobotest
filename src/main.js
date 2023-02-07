@@ -16,7 +16,7 @@ disableMenu();
 app.mount("#app");
 
 function disableMenu() {
-    if (window.location.hostname !== 'localhost') {
+    if (window.location.hostname === 'localhost') {
     return
     }
     

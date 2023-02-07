@@ -12,14 +12,12 @@ use tauri::Manager;
 fn main() {
   let quit = CustomMenuItem::new("quit".to_string(), "Quit");
   let hide = CustomMenuItem::new("hide".to_string(), "Hide");
-  let show = CustomMenuItem::new("show".to_string(), "Show");
 
   
 let tray_menu = SystemTrayMenu::new()
   .add_item(quit)
   .add_native_item(SystemTrayMenuItem::Separator)
-  .add_item(hide)
-  .add_item(show);
+  .add_item(hide);
 
   tauri::Builder::default()
     .system_tray(SystemTray::new().with_menu(tray_menu))
@@ -53,20 +51,15 @@ let tray_menu = SystemTrayMenu::new()
           }
           "hide" => {
             let window = app.get_window("main").unwrap();
-            println!("{:#?}",window.is_visible());
-            window.hide().unwrap();
-            window.minimize().unwrap();
-            // hide.enabled = false
-            // item_handle.set_title("Show").unwrap();
-            // item_handle.set_selected(true).unwrap();
-            
-          }
-          "show" => {
-            let window = app.get_window("main").unwrap();
-            println!("{:#?}",window.is_visible());
-            window.show().unwrap();
-            window.unminimize().unwrap();
-            window.set_focus().unwrap();
+            if window.is_visible().unwrap(){
+              item_handle.set_title("Show").unwrap();
+              window.minimize().unwrap();
+              window.hide().unwrap();
+            } else {
+              item_handle.set_title("Hide").unwrap();
+              window.show().unwrap();
+              window.unminimize().unwrap();
+            }     
           }
           _ => {}
         }

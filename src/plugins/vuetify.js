@@ -19,26 +19,6 @@ export default createVuetify({
     components,
     directives,
     defaults: {
-        global: {
-            rounded: "sm",
-        },
-        VAppBar: {
-            flat: true,
-        },
-        VBtn: {
-            color: "primary",
-            height: 44,
-            minWidth: 190,
-        },
-        VBtnAlt: {
-            color: "primary",
-            height: 48,
-            minWidth: 190,
-            variant: "outlined",
-        },
-        VSheet: {
-            color: "#212121",
-        },
     },
     theme: {
         defaultTheme: "dark",
