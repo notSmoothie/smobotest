@@ -4,7 +4,7 @@
             <v-avatar
                 rounded="0"
                 class="mr-3"
-                image="../src/assets/logo.svg"
+                image="/logo.png"
             />
             SMOBOT 0.0.10
            
@@ -19,7 +19,7 @@
                     <v-container class="text-center">
                         <v-responsive class="mx-auto" width="500">
                             <v-img
-                                src="../src/assets/logo.svg"
+                                src="/logo.png"
                                 height="400"
                             />
 
