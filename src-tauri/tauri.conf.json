@@ -17,6 +17,13 @@
         },
         "allowlist": {
             "all": true,
+            "http": {
+                "all": true,
+                "request": true
+              },
+            "notification": {
+                "all": true
+              },
             "fs": {
                 "all": true,
                 "scope": ["*"]
@@ -68,7 +75,7 @@
             "windows": {
                 "installMode": "quiet"
             },
-            "dialog": true,
+            "dialog": false,
             "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDUzMDE3QzY0RjIwNUI1ODAKUldTQXRRWHlaSHdCVTFORE1qZlhWRDlvNWNaY2ZlVHQzK0JjN3UyZlNlRnNvZzB1MDVsVHdWZHQK"
         },
         "windows": [

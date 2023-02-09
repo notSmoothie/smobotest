@@ -11,6 +11,13 @@ pub struct FilesMsg {
 }
 
 #[command]
+pub fn hide_window(app: tauri::AppHandle){
+    let id = "hide";
+    let bruh = app.tray_handle().get_item(id);
+    bruh.set_title("Show");
+}
+
+#[command]
 pub fn get_md_in_folder(event: String) -> Option<String> {
     println!("the path is {}", event);
     Some("test".to_string())
