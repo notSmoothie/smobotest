@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" :class="{ rotated: rotated }" @click="onCardClick" data-stopper>
+  <div class="wrapper" :class="{ rotated: rotated }" @click="onCardClick">
     <v-card class="front">
       <v-card-title class="topBar d-flex justify-space-between">
         <v-spacer></v-spacer>
