@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper" :class="{ rotated: rotated }" @click="onCardClick">
-    <v-card class="front">
+    <v-card class="front ba-0">
       <v-card-title class="topBar d-flex justify-space-between">
         <v-spacer></v-spacer>
         <span>{{ character.name }}</span>
