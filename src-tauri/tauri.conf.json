@@ -19,7 +19,8 @@
             "all": true,
             "http": {
                 "all": true,
-                "request": true
+                "request": true,
+                "scope": ["https://armory.twinstar-wow.com/*", "https://cata-twinhead.twinstar.cz/*", "https://twinstar-api.twinstar-wow.com/*"]
               },
             "notification": {
                 "all": true

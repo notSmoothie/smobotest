@@ -16,14 +16,17 @@ use tauri_plugin_store::PluginBuilder;
 fn main() {
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
     let hide = CustomMenuItem::new("hide".to_string(), "Hide");
+    let check_upd = CustomMenuItem::new("check_upd".to_string(), "Check for updates");
 
     let tray_menu = SystemTrayMenu::new()
         .add_item(hide)
         .add_native_item(SystemTrayMenuItem::Separator)
+        .add_item(check_upd)
+        .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(quit);
 
     tauri::Builder::default()
-        .system_tray(SystemTray::new().with_menu(tray_menu))  //  .on_system_tray_event(|app, event| match event{
+        .system_tray(SystemTray::new().with_menu(tray_menu)) 
         .on_system_tray_event(|app, event| match event{
             SystemTrayEvent::LeftClick {
                 position: _,
@@ -50,6 +53,9 @@ fn main() {
                 match id.as_str() {
                     "quit" => {
                         exit(0);
+                    }
+                    "check_upd" => {
+                        app.emit_all("checkUpdate",{}).unwrap();
                     }
                     "hide" => {
                         let window = app.get_window("main").unwrap();

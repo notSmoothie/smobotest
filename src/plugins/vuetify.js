@@ -21,12 +21,31 @@ export default createVuetify({
     defaults: {
     },
     theme: {
+        variations:{
+            colors:['primary'],
+            lighten:5,
+            darken:5
+        },
         defaultTheme: "dark",
         themes: {
             dark: {
                 dark: true,
                 colors: {
-                    primary: "#1697f6",
+                    primary: "#dd4814",
+                    secondary: "#3b444b",
+                    '1': '#C69B6D',
+                    '2': '#F48CBA',
+                    '3': '#AAD372',
+                    '4': '#FFF468',
+                    '5': '#FFFFFF',
+                    '6': '#3FC7EB',
+                    '7': '#0070DD',
+                    '9': '#8788EE',
+                    '11': '#FF7C0A',
+                    "horde-red": '#8C1616',
+                    "horde": '#000000',
+                    "alliance": '#00216a',
+                    "alliance-gold": '#D4AF37' 
                 },
             },
         },
