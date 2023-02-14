@@ -41,7 +41,7 @@ jobs:
             })
             return data.id
   build-tauri:
-    permissions: read-all
+    permissions: write-all
     needs: create-release
     strategy:
       fail-fast: false
