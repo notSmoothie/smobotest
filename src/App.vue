@@ -33,24 +33,25 @@
     </v-system-bar>
 
     <v-main>
-      <v-text-field
-        v-model="charToAdd"
-        @keydown.enter="gimmeChars()"
-        label="addchar"
-      ></v-text-field>
       <div class="grid-wrapper">
         <CharacterView
           @rotated="rotateEvent"
           :rotated="character.name == rotatedName"
-          class="flex-grow-1 flex-shrink-1"
-          v-for="character of characters.slice(0, 12)"
+          v-for="character of characters.slice(0, 11)"
           :character="character"
         ></CharacterView>
         <CharacterView
-          empty="true"
-          class="flex-grow-1 flex-shrink-1"
-          :character="characters[0]"
+          @rotated="rotateEvent"
+          @filled="lastFilled"
+          :empty="!lastFill"
+          :isFilled="lastIsFilled"
+          :rotated="
+            rotatedName == 'SB-addChar' || (lastFill && rotatedName == lastChar?.name)
+          "
+          :character="lastChar"
+          :chars="characters"
         ></CharacterView>
+
         <!-- <v-card
             class="charSheet"
             style="flex-grow: 5; user-select: none; pointer-events: none"
@@ -151,10 +152,13 @@ export default {
       loadingChar: false,
       characters: [],
       charToAdd: "",
+      lastIsFilled: false,
       v: _package.version,
       updateDialog: false,
       updateInfo: {},
       loadingUpdate: false,
+      lastChar: {},
+      snaccBarColor: "info",
     };
   },
   async created() {
@@ -182,8 +186,19 @@ export default {
       this.updateDialog = true;
     }
   },
-  computed: {},
+  computed: {
+    lastFill() {
+      return this.lastIsFilled;
+    },
+  },
   methods: {
+    lastFilled(e) {
+      this.lastIsFilled = true;
+      this.lastChar = e;
+      this.characters.push(e);
+      this.lastIsFilled = false;
+      this.lastChar = {};
+    },
     rotateEvent(e) {
       if (this.rotatedName == e) {
         this.rotatedName = "";
@@ -197,43 +212,6 @@ export default {
           return data + String.fromCharCode(byte);
         }, "")
       );
-    },
-    async gimmeChars() {
-      let toonUrl = `https://twinstar-api.twinstar-wow.com/character/?name=${this.charToAdd}&realm=Apollo`;
-      if (
-        this.characters.find(
-          (el) => el.name.toLowerCase() == this.charToAdd.toLowerCase()
-        ) !== undefined
-      ) {
-        this.snaccBarColor = "red";
-        this.snaccBarMsg = "Nono!";
-        this.snackbar = true;
-        setTimeout(() => (this.snackbar = false), 2000);
-        this.charToAdd = "";
-        return;
-      }
-
-      this.charToAdd = "";
-      await client
-        .get(toonUrl, {
-          // the expected response type
-          responseType: ResponseType.JSON,
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-        .then((el) => {
-          try {
-            if (el.ok == false) return;
-            this.loadingChar = true;
-            this.characters.push(el.data);
-            localStorage.setItem("characters", JSON.stringify(this.characters));
-            this.loadingChar = false;
-            console.log(this.characters);
-          } catch (e) {
-            console.log(e);
-          }
-        });
     },
     async update() {
       await installUpdate();
@@ -258,6 +236,7 @@ export default {
 path {
   fill: #3b444b;
 }
+
 .title {
   position: fixed;
   width: 100%;
