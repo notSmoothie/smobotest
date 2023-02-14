@@ -1,2 +1,2 @@
 # SMOBOT ON RAILS
-![example](./images/example.png)
+![example](./images/example.PNG)
