@@ -46,6 +46,11 @@
           v-for="character of characters.slice(0, 12)"
           :character="character"
         ></CharacterView>
+        <CharacterView
+          empty="true"
+          class="flex-grow-1 flex-shrink-1"
+          :character="characters[0]"
+        ></CharacterView>
         <!-- <v-card
             class="charSheet"
             style="flex-grow: 5; user-select: none; pointer-events: none"

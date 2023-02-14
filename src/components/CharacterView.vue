@@ -1,7 +1,11 @@
 <template>
   <div class="wrapper" :class="{ rotated: rotated }" @click="onCardClick">
-    <v-card class="front">
+    <v-card style="pointer-events: none" class="front">
+      <div style="height: 100%" class="d-flex justify-center align-center" v-if="empty">
+        <v-icon size="40">mdi-plus</v-icon>
+      </div>
       <v-card-title
+        v-if="!empty"
         :class="`text-${character.class} primary`"
         class="topBar d-flex justify-space-between"
       >
@@ -10,7 +14,7 @@
         <v-spacer></v-spacer>
         <v-img :src="`classes/${character.class}.png`" max-width="2rem"></v-img>
       </v-card-title>
-      <v-card-text class="actionSpace mx-5">
+      <v-card-text v-if="!empty" class="actionSpace mx-5">
         <v-img
           class="factionLogo"
           :src="`factions/${character.faction}.svg`"
@@ -25,6 +29,7 @@
         </span>
       </v-card-text>
       <v-icon
+        v-if="!empty"
         class="actionButton"
         style="right: 2px; bottom: 2px; position: absolute"
         size="15px"
@@ -32,7 +37,7 @@
       ></v-icon>
     </v-card>
     <v-card
-      :style="`border-radius: 10px;`"
+      style="pointer-events: none"
       class="back"
       :class="`text-${character.class} primary`"
     >
@@ -68,6 +73,7 @@ export default {
       default: "",
     },
     rotated: false,
+    empty: false,
   },
   data() {
     return {};
@@ -84,6 +90,14 @@ export default {
       return `rgb(var(--v-theme-${
         this.character.faction == "0" ? "horde" : "alliance"
       }))`;
+    },
+    opacity() {
+      if (this.empty) return 0.3;
+      return 1;
+    },
+    border() {
+      if (this.empty) return "2px dashed white";
+      return "";
     },
   },
   methods: {
@@ -109,6 +123,8 @@ export default {
 }
 
 .wrapper {
+  opacity: v-bind(opacity);
+  border: v-bind(border);
   position: relative;
   min-height: 20vh;
 }
@@ -171,6 +187,16 @@ export default {
 
 .actionButton {
   transition: all 0.5s;
+}
+
+.wrapper {
+  transition: all 0.5s;
+}
+
+.wrapper:hover {
+  opacity: 1;
+  transition: all 0.5s;
+  border-color: red !important;
 }
 
 .wrapper:hover .actionButton {
