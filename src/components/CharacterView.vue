@@ -1,21 +1,28 @@
 <template>
   <div class="wrapper" :class="{ rotated: rotated }" @click="onCardClick">
     <v-card class="front">
-      <v-card-title class="topBar d-flex justify-space-between">
+      <v-card-title
+        :class="`text-${character.class} primary`"
+        class="topBar d-flex justify-space-between"
+      >
         <v-spacer></v-spacer>
         <span>{{ character.name }}</span>
         <v-spacer></v-spacer>
         <v-img :src="`classes/${character.class}.png`" max-width="2rem"></v-img>
       </v-card-title>
-      <v-card-text class="actionSpace">
+      <v-card-text class="actionSpace mx-5">
         <v-img
           class="factionLogo"
           :src="`factions/${character.faction}.svg`"
           min-width="200px"
         ></v-img>
         <br />
-        Lvl: {{ character.level }}<br />
-        Ilvl: {{ Math.round(character.averageItemLevel) }}
+        <v-icon icon="mdi-arrow-up-bold"></v-icon>
+        {{ character.level }}<br />
+        <span v-if="character.level >= 85">
+          <v-icon icon="mdi-crown"></v-icon>
+          {{ Math.round(character.averageItemLevel) }}
+        </span>
       </v-card-text>
       <v-icon
         class="actionButton"
