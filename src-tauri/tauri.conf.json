@@ -88,7 +88,9 @@
                 "decorations": false,
                 "title": "smobot-test",
                 "theme": "Dark",
-                "width": 1080
+                "width": 1080,
+                "transparent": true
+
             }
         ]
     }

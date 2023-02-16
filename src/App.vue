@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="bruh">
     <v-system-bar data-tauri-drag-region window>
       <div class="d-flex align-center">
         <v-img
@@ -41,9 +41,11 @@
           :character="character"
         ></CharacterView>
         <CharacterView
+          :key="characters.length"
+          classS="kokot"
           @rotated="rotateEvent"
           @filled="lastFilled"
-          :empty="!lastFill"
+          :empty="true"
           :isFilled="lastIsFilled"
           :rotated="
             rotatedName == 'SB-addChar' || (lastFill && rotatedName == lastChar?.name)
@@ -51,34 +53,7 @@
           :character="lastChar"
           :chars="characters"
         ></CharacterView>
-
-        <!-- <v-card
-            class="charSheet"
-            style="flex-grow: 5; user-select: none; pointer-events: none"
-          >
-            <v-card-text> </v-card-text
-          ></v-card> -->
       </div>
-      <!-- <div class="rotation-wrap">
-        <v-card class="front"
-          ><v-card-title>front</v-card-title
-          ><v-card-text
-            >Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam praesentium
-            debitis, velit laboriosam commodi fugit, reprehenderit eaque nemo deleniti
-            magni deserunt adipisci ullam minima nesciunt accusantium corporis soluta? Et,
-            maxime.</v-card-text
-          ></v-card
-        >
-        <v-card class="back"
-          ><v-card-title>back</v-card-title
-          ><v-card-text
-            >Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae illum
-            dicta quis! Quia voluptatum provident, suscipit similique nulla obcaecati non
-            expedita porro voluptatibus eligendi iste vel est ullam officia
-            doloremque!</v-card-text
-          ></v-card
-        >
-      </div> -->
     </v-main>
     <v-dialog max-width="400px" v-model="updateDialog" :persistent="true">
       <v-card>
@@ -195,10 +170,14 @@ export default {
     lastFilled(e) {
       this.lastIsFilled = true;
       this.lastChar = e;
-      this.characters.push(e);
-      this.lastIsFilled = false;
-      this.lastChar = {};
+      setTimeout(() => {
+        this.characters.push(this.lastChar);
+        localStorage.setItem("characters", JSON.stringify(this.characters));
+        this.lastIsFilled = false;
+        this.lastChar = "";
+      }, 500);
     },
+
     rotateEvent(e) {
       if (this.rotatedName == e) {
         this.rotatedName = "";
@@ -228,6 +207,10 @@ export default {
 </script>
 
 <style>
+.bruh {
+  background: transparent !important;
+}
+
 .footMan {
   position: sticky !important;
   bottom: 0;
@@ -255,6 +238,7 @@ path {
   width: calc(100% - 4rem);
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(6, 1fr);
+  transition: all 0.5s;
 }
 
 /*  */
@@ -264,6 +248,7 @@ path {
     width: calc(100% - 4rem);
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(4, 1fr);
+    transition: all 0.5s;
   }
 }
 @media screen and (min-width: 1200px) {
@@ -272,6 +257,21 @@ path {
     grid-template-rows: repeat(3, 1fr);
     width: calc(100% - 10rem);
     margin: 3rem 5rem;
+    transition: all 0.5s;
+  }
+}
+
+.kokot {
+  animation: splash 0.5s normal forwards ease-out;
+  transform-origin: 0% 50%;
+}
+
+@keyframes splash {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
   }
 }
 /* .rotation-wrap {

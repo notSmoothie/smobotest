@@ -1,7 +1,7 @@
 {
     "name": "smobot-test",
     "private": true,
-    "version": "0.0.695",
+    "version": "0.0.6969",
     "scripts": {
         "dev": "vite",
         "build": "vite build",

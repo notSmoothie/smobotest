@@ -1,11 +1,15 @@
 <template>
   <div
     class="wrapper"
-    v-if="empty && !isFilled"
-    :class="{ rotated: rotated }"
+    v-if="empty"
+    :class="[{ rotated: rotated }, classS]"
     @click="onCardClick"
   >
-    <v-card style="height: 100%; background-color: rgba(40, 40, 40, 0.3)" class="front">
+    <v-card
+      v-if="!isFilled"
+      style="height: 100%; background-color: rgba(20, 20, 20, 0.5)"
+      class="front"
+    >
       <v-card-text style="height: 100%" class="mx-5 d-flex justify-center align-center">
         <v-icon class="plusIcon" size="40">mdi-plus</v-icon>
         <v-img
@@ -23,44 +27,73 @@
       </v-card-text>
     </v-card>
 
-    <v-card @click.stop class="back">
+    <v-card
+      v-if="isFilled"
+      style="pointer-events: none; height: 20vh; background-color: rgba(20, 20, 20, 0.5)"
+      class="front"
+    >
       <v-card-title
-        v-ripple.stop
-        class="topBar d-flex align-center justify-space-between"
+        :class="`text-${character.class} primary`"
+        class="topBar d-flex justify-space-between"
       >
         <v-spacer></v-spacer>
-        <v-icon
-          @click="expandSearch = true"
-          size="25"
-          color="#4e4e4e"
-          icon="mdi-magnify"
-        ></v-icon>
+        <span>{{ character.name }}</span>
+        <v-spacer></v-spacer>
+        <v-img :src="`classes/${character.class}.png`" max-width="2rem"></v-img>
+      </v-card-title>
+      <v-card-text class="actionSpace mx-5" style="height: 100%">
+        <v-img
+          class="factionLogo"
+          :src="`factions/${character.faction}.svg`"
+          min-width="200px"
+        ></v-img>
+        <br />
+        <v-icon icon="mdi-arrow-up-bold"></v-icon>
+        {{ character.level }}<br />
+        <span v-if="character.level >= 85">
+          <v-icon icon="mdi-crown"></v-icon>
+          {{ Math.round(character.averageItemLevel) }}
+        </span>
+      </v-card-text>
+      <v-icon
+        class="actionButton"
+        style="right: 2px; bottom: 2px; position: absolute"
+        size="15px"
+        icon="mdi-subdirectory-arrow-right"
+      ></v-icon>
+    </v-card>
+
+    <v-card @click.stop class="back" style="background-color: rgba(20, 20, 20, 0.5)">
+      <v-card-title
+        v-ripple.stop
+        class="topBar d-flex justify-center"
+        style="background-color: rgb(var(--v-theme-primary))"
+      >
+        <span style="pointer-events: none, user-select: none, color=rgba(60,60,60,0.6)"
+          >New Character</span
+        >
+      </v-card-title>
+      <v-card-text v-ripple.stop class="mx-5 mt-5 d-flex align-center justify-center">
+        <v-icon size="25" color="#4e4e4e" icon="mdi-magnify"></v-icon>
         <input
-          style="width: 70%"
-          v-if="expandSearch"
+          style="width: 70%; outline: 0px"
+          class="px-3"
+          ref="inputField"
           @keydown.enter="gimmeChar"
           type="text"
           v-model="charToAdd"
         />
-        <v-spacer></v-spacer>
-      </v-card-title>
-      <v-card-text v-ripple.stop class="mx-5">
-        <br />
-        <v-icon icon="mdi-arrow-up-bold"></v-icon>
-        ??<br />
-        <v-icon icon="mdi-crown"></v-icon>
-        ??
       </v-card-text>
     </v-card>
   </div>
 
-  <div
-    class="wrapper"
-    v-if="!empty || isFilled"
-    :class="{ rotated: rotated }"
-    @click="onCardClick"
-  >
-    <v-card v-if="!empty || isFilled" style="pointer-events: none" class="front">
+  <div class="wrapper" v-if="!empty || isFilled" :class="{ rotated: rotated }">
+    <v-card
+      @click="onCardClick"
+      v-if="!empty"
+      style="background-color: rgba(20, 20, 20, 0.5)"
+      class="front"
+    >
       <v-card-title
         :class="`text-${character.class} primary`"
         class="topBar d-flex justify-space-between"
@@ -94,12 +127,15 @@
     </v-card>
 
     <v-card
-      v-if="!empty || isFilled"
-      style="pointer-events: none"
+      @click="onCardClick"
+      v-if="!empty"
+      style="background-color: rgba(20, 20, 20, 0.5)"
       class="back"
-      :class="`text-${character.class} primary`"
     >
-      <v-card-title v-if="!empty || isFilled" class="topBar d-flex justify-space-between">
+      <v-card-title
+        v-if="!empty"
+        :class="`topBar d-flex justify-space-between text-${character.class}`"
+      >
         <span>{{ character.name }}</span>
         <v-spacer></v-spacer>
       </v-card-title>
@@ -129,8 +165,10 @@ import AddCharacter from "./AddCharacter.vue";
 export default {
   name: "CharacterView",
   components: { AddCharacter },
+  emits: ["rotated", "filled"],
   props: {
     chars: {},
+    classS: "",
     character: {
       name: String,
       default: "",
@@ -144,7 +182,6 @@ export default {
   data() {
     return {
       charToAdd: "",
-      expandSearch: false,
     };
   },
   async created() {},
@@ -161,11 +198,18 @@ export default {
       }))`;
     },
     opacity() {
+      if (this.isFilled) return 1;
       if (this.empty && !this.rotated) return 0.3;
       return 1;
     },
     border() {
-      if (this.empty && !this.rotated) return "2px dashed white";
+      if (this.isFilled) return "none";
+      if (this.empty && !this.rotated) return "1px dashed #ffffff";
+      return "";
+    },
+    borderHover() {
+      if (this.isFilled) return "none";
+      if (this.empty && !this.rotated) return "1px dashed #606060";
       return "";
     },
   },
@@ -191,11 +235,11 @@ export default {
         .then((el) => {
           try {
             if (el.ok == false) return;
-            this.loadingChar = true;
-            this.loadingChar = false;
-            this.$emit("rotated");
-            setTimeout(() => this.$emit("filled", el.data), 270);
-            t;
+            this.$emit("filled", el.data);
+            this.charToAdd = "";
+            setTimeout(() => {
+              this.$emit("rotated");
+            }, 20);
           } catch (e) {
             console.log(e);
           }
@@ -209,6 +253,7 @@ export default {
       console.log("rotating");
       if (this.empty) {
         this.$emit("rotated", "SB-addChar");
+        this.$refs.inputField.focus();
         return;
       }
       this.$emit("rotated", this.character.name);
@@ -235,7 +280,7 @@ export default {
   opacity: v-bind(opacity);
   border: v-bind(border);
   position: relative;
-  min-height: 20vh;
+  height: 20vh;
 }
 
 .wrapper.rotated .back {
@@ -254,6 +299,10 @@ export default {
   width: 100%;
   height: 100%;
   cursor: default !important;
+}
+
+input:focus-within {
+  border-bottom: 1px solid rgb(var(--v-theme-primary)) !important;
 }
 
 .back {
@@ -292,12 +341,13 @@ export default {
   height: 40px;
   bottom: -15px;
   right: -15px;
-  background-color: rgb(var(--v-theme-secondary));
+  background-color: rgba(var(--v-theme-secondary), 0.6);
   transition: all 0.5s;
 }
 
 .actionButton {
   transition: all 0.5s;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .wrapper {
@@ -307,7 +357,7 @@ export default {
 .wrapper:hover {
   opacity: 1;
   transition: all 0.5s;
-  border-color: rgb(var(--v-theme-primary)) !important;
+  border: v-bind(borderHover);
 }
 
 .wrapper .plusIcon {
@@ -316,23 +366,24 @@ export default {
 
 .wrapper:hover .plusIcon {
   transition: all 0.5s;
-  color: rgb(var(--v-theme-primary)) !important;
+  color: rgba(200, 200, 200, 0.7);
 }
 
 .wrapper:hover .actionButton {
-  color: rgb(var(--v-theme-primary)) !important;
-  font-size: x-large !important;
-  bottom: 5px !important;
-  right: 5px !important;
+  color: white !important;
+  font-size: large !important;
+  bottom: 4px !important;
+  right: 4px !important;
   transition: all 0.5s;
 }
 
 .wrapper:hover .actionSpace::after {
   width: 60px;
   height: 60px;
-  bottom: -26px;
-  right: -26px;
+  bottom: -30px;
+  right: -30px;
   transition: all 0.5s;
+  background-color: rgba(var(--v-theme-secondary), 1);
 }
 
 path {

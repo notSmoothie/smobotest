@@ -7,7 +7,7 @@ import vuetify from "./plugins/vuetify";
 
 const app = createApp(App);
 
-registerPlugins(app);
+
 
 app.use(vuetify);
 app.use(router);
