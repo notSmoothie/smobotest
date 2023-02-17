@@ -35,21 +35,31 @@
     <v-main>
       <div class="grid-wrapper">
         <CharacterView
+          :loading="loading"
+          :key="charIndex"
+          :hidden="charIndex == draggIdx"
+          @dragging="dragging"
+          @dragging:stop="draggStop"
+          @dragging:delete="draggDel"
           @rotated="rotateEvent"
           :rotated="character.name == rotatedName"
-          v-for="character of characters.slice(0, 11)"
+          v-for="(character, charIndex) of characters"
           :character="character"
+          :characterIds="charactersIds[`${character.name.toLowerCase()}`]"
+          :lastWed="lastWed"
         ></CharacterView>
         <CharacterView
           :key="characters.length"
-          classS="kokot"
+          classS="anim"
           @rotated="rotateEvent"
-          @filled="lastFilled"
+          @bosskills="addBossKill"
           :empty="true"
           :isFilled="lastIsFilled"
           :rotated="
             rotatedName == 'SB-addChar' || (lastFill && rotatedName == lastChar?.name)
           "
+          :lastWed="lastWed"
+          :characterIds="lastIds"
           :character="lastChar"
           :chars="characters"
         ></CharacterView>
@@ -87,7 +97,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-overlay :model-value="loadingUpdate" class="align-center justify-center">
+    <v-overlay :model-value="loading" class="align-center justify-center">
       <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
     </v-overlay>
 
@@ -111,8 +121,10 @@ import { checkUpdate, installUpdate } from "@tauri-apps/api/updater";
 import { listen } from "@tauri-apps/api/event";
 import { getClient, ResponseType } from "@tauri-apps/api/http";
 import CharacterView from "./components/CharacterView.vue";
+import { Store } from "tauri-plugin-store-api";
 
 import _package from "../package.json";
+const store = new Store(".settings.dat");
 const client = await getClient();
 
 export default {
@@ -123,9 +135,11 @@ export default {
   data() {
     return {
       rotatedName: "",
+      numero: 0,
       snackbar: false,
       loadingChar: false,
       characters: [],
+      charactersIds: {},
       charToAdd: "",
       lastIsFilled: false,
       v: _package.version,
@@ -133,17 +147,40 @@ export default {
       updateInfo: {},
       loadingUpdate: false,
       lastChar: {},
+      lastIds: {},
       snaccBarColor: "info",
+      lastWed: new Date(),
+      today: new Date(),
+      loading: true,
+      draggIdx: -1,
     };
   },
   async created() {
+    console.log(this.characters);
+    console.log(this.charactersIds);
+    this.lastWed.setUTCDate(
+      this.lastWed.getUTCDate() - ((this.lastWed.getUTCDay() + 4) % 7)
+    );
+    this.lastWed.setUTCHours("5", "0", "0");
+
+    if (
+      this.lastWed.getDay() == this.today.getDay() &&
+      this.lastWed.getMonth() == this.today.getMonth() &&
+      this.lastWed.getFullYear() == this.today.getFullYear() &&
+      this.today.getHours() < 4
+    ) {
+      this.lastWed.setUTCDate(this.lastWed.getUTCDate() - 7);
+    }
+    this.characters = (await store.get("characters")) ?? [];
+    console.log(this.characters);
+    this.charactersIds = (await store.get("charIds")) ?? {};
+
     await appWindow.setMinSize(new PhysicalSize(800, 600));
-    this.characters = JSON.parse(localStorage.getItem("characters")) ?? [];
     const unlisten = await listen("checkUpdate", async (event) => {
       console.log("thishappened");
-      this.loadingUpdate = true;
+      this.loading = true;
       this.updateInfo = await checkUpdate();
-      this.loadingUpdate = false;
+      this.loading = false;
       if (this.updateInfo.shouldUpdate) {
         this.updateDialog = true;
       } else {
@@ -154,9 +191,8 @@ export default {
       }
     });
 
-    this.loadingUpdate = true;
     this.updateInfo = await checkUpdate();
-    this.loadingUpdate = false;
+    this.loading = false;
     if (this.updateInfo.shouldUpdate) {
       this.updateDialog = true;
     }
@@ -167,17 +203,39 @@ export default {
     },
   },
   methods: {
-    lastFilled(e) {
-      this.lastIsFilled = true;
-      this.lastChar = e;
+    enterDrop(e) {
+      console.log("asdasdsadsa");
+    },
+    draggStop() {
+      this.draggIdx = -1;
+    },
+    async draggDel() {
+      delete this.charactersIds[`${this.characters[this.draggIdx].name.toLowerCase()}`];
+      this.characters.splice(this.draggIdx, 1);
+      this.draggIdx = -1;
+      await store.set("characters", this.characters);
+      await store.set("charIds", this.charactersIds);
+    },
+    dragging(a) {
+      this.draggIdx = this.characters.indexOf(a);
+    },
+    async addBossKill(a, b, c) {
+      this.lastChar = c;
+      this.lastIds = a;
       setTimeout(() => {
+        this.lastIsFilled = true;
+      }, 5);
+
+      setTimeout(async () => {
+        this.charactersIds[`${b.toLowerCase()}`] = this.lastIds;
         this.characters.push(this.lastChar);
-        localStorage.setItem("characters", JSON.stringify(this.characters));
         this.lastIsFilled = false;
         this.lastChar = "";
+        this.lastIds = "";
+        await store.set("characters", this.characters);
+        await store.set("charIds", this.charactersIds);
       }, 500);
     },
-
     rotateEvent(e) {
       if (this.rotatedName == e) {
         this.rotatedName = "";
@@ -201,6 +259,15 @@ export default {
     },
     async minimize() {
       appWindow.minimize();
+    },
+  },
+  watch: {
+    charactersIds: {
+      func() {
+        console.log("here");
+        this.numero++;
+      },
+      deep: true,
     },
   },
 };
@@ -261,7 +328,7 @@ path {
   }
 }
 
-.kokot {
+.anim {
   animation: splash 0.5s normal forwards ease-out;
   transform-origin: 0% 50%;
 }

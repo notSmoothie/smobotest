@@ -97,6 +97,7 @@ fn main() {
             cmd::hide_window
         ])
         .plugin(PluginBuilder::default().build())
+        .plugin(tauri_plugin_window_state::Builder::default().build())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
