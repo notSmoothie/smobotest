@@ -7,8 +7,9 @@ mod cmd;
 
 use std::process::exit;
 
-use tauri::{Manager};
-use window_vibrancy::{apply_blur, apply_vibrancy, NSVisualEffectMaterial, apply_acrylic};
+use tauri::Manager;
+use window_vibrancy::apply_blur;
+use tauri::http::ResponseBuilder;
 use tauri::{
     CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem
 };
@@ -27,9 +28,12 @@ fn main() {
         .add_item(quit);
 
     tauri::Builder::default()
+        .register_uri_scheme_protocol("smobot", move |_app, request|{
+            println!("request {:#?}", request);
+            return ResponseBuilder::new().status(404).body(Vec::new());
+        })
         .setup(|app| {
         let window = app.get_window("main").unwrap();
-  
         #[cfg(target_os = "macos")]
         apply_vibrancy(&window, NSVisualEffectMaterial::HudWindow, None, None)
           .expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
@@ -94,7 +98,7 @@ fn main() {
             cmd::save_content,
             cmd::get_content,
             cmd::read_folder,
-            cmd::hide_window
+            cmd::hide_window,
         ])
         .plugin(PluginBuilder::default().build())
         .plugin(tauri_plugin_window_state::Builder::default().build())

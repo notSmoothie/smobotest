@@ -16,18 +16,34 @@
             "iconAsTemplate": true
         },
         "allowlist": {
+            "protocol": {
+                "all": true,
+                "asset": false,
+                "assetScope": []
+            },
             "all": true,
+            "shell": {
+                "all": false,
+                "execute": false,
+                "open": true,
+                "scope": [],
+                "sidecar": false
+            },
             "http": {
                 "all": true,
                 "request": true,
-                "scope": ["https://armory.twinstar-wow.com/*", "https://cata-twinhead.twinstar.cz/*", "https://twinstar-api.twinstar-wow.com/*"]
-              },
+                "scope": [
+                    "https://armory.twinstar-wow.com/*",
+                    "https://cata-twinhead.twinstar.cz/*",
+                    "https://twinstar-api.twinstar-wow.com/*"
+                ]
+            },
             "notification": {
                 "all": true
-              },
+            },
             "fs": {
                 "all": true,
-                "scope": ["*"]
+                "scope": ["$APPLOCALDATA/*", "$APPLOCALDATA"]
             }
         },
         "bundle": {
@@ -54,9 +70,7 @@
                 "providerShortName": null,
                 "signingIdentity": null
             },
-            "resources": [
-            "../src/assets/*"
-            ],
+            "resources": ["../src/assets/*"],
             "shortDescription": "",
             "targets": "all",
             "windows": {
@@ -74,7 +88,7 @@
                 "https://github.com/notSmoothie/smobotest/releases/latest/download/latest.json"
             ],
             "windows": {
-                "installMode": "quiet"
+                "installMode": "passive"
             },
             "dialog": false,
             "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDUzMDE3QzY0RjIwNUI1ODAKUldTQXRRWHlaSHdCVTFORE1qZlhWRDlvNWNaY2ZlVHQzK0JjN3UyZlNlRnNvZzB1MDVsVHdWZHQK"
@@ -90,7 +104,6 @@
                 "theme": "Dark",
                 "width": 1080,
                 "transparent": true
-
             }
         ]
     }

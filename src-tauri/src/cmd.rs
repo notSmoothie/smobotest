@@ -1,8 +1,8 @@
 use std::{fs, time::UNIX_EPOCH, path::{self, PathBuf}};
 
-use tauri::{command};
+use tauri::command;
 use serde::{Deserialize, Serialize};
-// 自定义结构体，并需要将该结构体作为返回值时，需要derive：Deserialize、Serialize
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct FilesMsg {
     update_time: i64,
@@ -14,7 +14,13 @@ pub struct FilesMsg {
 pub fn hide_window(app: tauri::AppHandle){
     let id = "hide";
     let bruh = app.tray_handle().get_item(id);
-    bruh.set_title("Show");
+    match bruh.set_title("Show") {
+        Ok(_) => {} // Success, do nothing
+        Err(err) => {
+            // Handle the error here, you could print an error message or take appropriate action.
+            eprintln!("Error while setting tray title: {}", err);
+        }
+    }
 }
 
 #[command]
