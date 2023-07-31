@@ -1,14 +1,14 @@
-name: 'My Workflow'
+name: "My Workflow"
 
-on: 
+on:
   push:
     branches:
       - "main"
 permissions:
   contents: write
-  pull-requests: write 
+  pull-requests: write
   issues: write
-  packages: write 
+  packages: write
 
 jobs:
   create-release:
@@ -66,7 +66,7 @@ jobs:
         run: yarn && yarn build
       - uses: tauri-apps/tauri-action@dev
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         with:
